@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to the Night Sky</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Gloria Hallelujah', cursive;
+      background-color: #000; /* Black background for night sky */
+      color: white;
+      overflow: hidden; /* Prevent scrollbars */
+    }
+
+    #particles-js {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1; /* Behind the content */
+      background-color: #000; /* Ensure a consistent black background */
+    }
+
+    .sky-content {
+      position: relative;
+      z-index: 1; /* Above the background */
+      color: white;
+      text-align: center;
+      padding: 10px;
+      height: 80vh;
+    }
+
+    .copy-btn {
+      margin: 15px 0;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #444;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .copy-btn:hover {
+      background-color: #ffddaa;
+      color: #000;
+      transform: scale(1.05);
+    }
+
+    .build-with a, .source-code a {
+      text-decoration: none;
+      color: #ffddaa; /* Star-like yellow for links */
+      transition: color 0.3s ease;
+    }
+
+    .build-with a:hover, .source-code a:hover {
+      color: #ffffff; /* White on hover */
+    }
+  </style>
+</head>
+<body>
+  <!-- Particles Background -->
+  <div id="particles-js"></div>
+
+  <!-- Content -->
+  <div class="sky-content">
+    <h1 class="post-title" style="margin-bottom: 20px;">Welcome to the Night Sky</h1>
+    <p class="build-with">
+      Built with <a href="https://vincentgarreau.com/particles.js/" target="_blank">Particles.js</a>. 
+      See source code here <a href="https://github.com/your-github-repo/night-sky" target="_blank">[GitHub]</a>
+    </p>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+<script>
+  particlesJS("particles-js", {
+      "particles": {
+        "number": {
+          "value": 500,
+          "density": {
+            "enable": true,
+            "value_area": 800 
+          }
+        },
+        "color": {
+          "value": ["#ffffff", "#ffddaa", "#aad4ff", "#ff9999"]
+        },
+        "shape": {
+          "type": "circle",
+          "stroke": {
+            "width": 0,
+            "color": "#000000"
+          }
+        },
+        "opacity": {
+          "value": 1.0,
+          "random": true,
+          "anim": {
+            "enable": true,
+            "speed": 0.5, 
+            "opacity_min": 0.3,
+            "sync": false
+          }
+        },
+        "size": {
+          "value": 2,
+          "random": true,
+          "anim": {
+            "enable": true,
+            "speed": 0.3,
+            "size_min": 0.5,
+            "sync": false
+          }
+        },
+        "line_linked": {
+          "enable": false 
+        },
+        "move": {
+          "enable": true,
+          "speed": 0.1, 
+          "direction": "none",
+          "random": true,
+          "straight": false,
+          "out_mode": "out",
+          "bounce": false
+        }
+      },
+      "interactivity": {
+        "detect_on": "canvas",
+        "events": {
+          "onhover": {
+            "enable": false
+          },
+          "onclick": {
+            "enable": false
+          },
+          "resize": true
+        }
+      },
+      "retina_detect": true
+    });
+
+function createShootingStar() {
+  const canvas = document.querySelector(".particles-js-canvas-el");
+  const ctx = canvas.getContext("2d");
+
+  const elementColors = [
+    { name: "Nitrogen/Oxygen", colors: ["rgba(255, 69, 0, 1)", "rgba(255, 69, 0, 0)"] }, // Red
+    { name: "Iron", colors: ["rgba(255, 255, 0, 1)", "rgba(255, 255, 0, 0)"] }, // Yellow
+    { name: "Calcium", colors: ["rgba(138, 43, 226, 1)", "rgba(138, 43, 226, 0)"] }, // Violet
+    { name: "Sodium", colors: ["rgba(255, 165, 0, 1)", "rgba(255, 165, 0, 0)"] }, // Orange
+    { name: "Magnesium", colors: ["rgba(135, 206, 250, 1)", "rgba(135, 206, 250, 0)"] }, // Light blue
+    { name: "Copper", colors: ["rgba(70, 130, 180, 1)", "rgba(70, 130, 180, 0)"] }, // Blue
+  ];
+
+  const randomElement = elementColors[Math.floor(Math.random() * elementColors.length)];
+
+  const star = {
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    size: Math.random() * 5 + 1,
+    speedX: Math.random() * 8 - 2,
+    speedY: Math.random() * 8 - 2,
+    opacity: 1,
+    trailLength: 0,
+    fading: false,
+  };
+
+  function animateStar() {
+    if (!star.fading) {
+      star.opacity -= 0.01; 
+      if (star.opacity <= 0) {
+        return; 
+      }
+    }
+
+    const velocity = Math.sqrt(star.speedX ** 2 + star.speedY ** 2);
+    const tailX = star.x - star.trailLength * (star.speedX / velocity);
+    const tailY = star.y - star.trailLength * (star.speedY / velocity);
+
+    star.trailLength += velocity * 0.5;
+
+    // Draw trail
+    const gradient = ctx.createLinearGradient(star.x, star.y, tailX, tailY);
+    gradient.addColorStop(0, `rgba(255, 255, 255, ${star.opacity})`);
+    gradient.addColorStop(1, `rgba(${parseColor(randomElement.colors[0])}, 0)`);
+
+    ctx.globalCompositeOperation = "lighter";
+    ctx.beginPath();
+    ctx.strokeStyle = gradient;
+    ctx.lineWidth = star.size;
+    ctx.moveTo(star.x, star.y);
+    ctx.lineTo(tailX, tailY);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(star.x, star.y, star.size * 0.5, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
+    ctx.fill();
+
+    star.x += star.speedX;
+    star.y += star.speedY;
+
+    requestAnimationFrame(animateStar);
+  }
+
+  animateStar();
+}
+
+function parseColor(rgba) {
+  const result = rgba.match(/\d+/g);
+  return result.slice(0, 3).join(",");
+}
+
+setInterval(createShootingStar, Math.random() * 500 + 250);
+
+</script>
+
+<script>
+  const copyButton = document.getElementById("copy-button");
+
+  copyButton.addEventListener("click", async () => {
+    const urlToCopy = window.location.href;
+    try {
+      await navigator.clipboard.writeText(urlToCopy);
+
+      copyButton.textContent = "Copied!";
+      copyButton.classList.add("success");
+
+      setTimeout(() => {
+        copyButton.textContent = "Copy Website Link";
+        copyButton.classList.remove("success");
+      }, 3000);
+    } catch (err) {
+      console.error("Failed to copy:", err);
+    }
+  });
+</script>
+
