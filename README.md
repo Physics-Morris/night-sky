@@ -8,6 +8,6 @@ Watch in full screen to get the best experience.
 Watch the demo video below:
 
 <video width="640" controls>
-  <source src="demo.mp4" type="video/mp4">
+  <source src="https://github.com/Physics-Morris/night-sky/blob/main/demo.mp4" type="video/mp4">
 </video>
 
